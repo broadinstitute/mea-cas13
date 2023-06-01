@@ -212,8 +212,6 @@ def save_results(explorer_name, gen_seqs, site_df, args, model, s_time):
             'hd_cons_on_target': [prep_seqs.hamming_dist(gen_seq.sequence, prep_seqs.consensus_seq(model.target_set1_nt, nt = True)[context_nt:-context_nt])],
             'mean_on_target_act' : [perf[0]], 
             'mean_off_target_act' : [perf[1]],
-            # 'target_set1_nt': [site_df.target_set1_nt],
-            # 'target_set2_nt': [site_df.target_set2_nt],
             'hd_min_targets': [min([prep_seqs.hamming_dist(gen_seq.sequence, target[context_nt:-context_nt]) for target in site_df.target_set1_nt + site_df.target_set2_nt])],
             'hd_min_target_set1': [min([prep_seqs.hamming_dist(gen_seq.sequence, target[context_nt:-context_nt]) for target in site_df.target_set1_nt])],
             'hd_min_target_set2': [min([prep_seqs.hamming_dist(gen_seq.sequence, target[context_nt:-context_nt]) for target in site_df.target_set1_nt])],
