@@ -74,7 +74,7 @@ All compiled results files have the following columns:
 * `G_PFS` indicates whether or not the genomic site has a 'G' at the protospacer-flanking site.
 
 The output files of guides designed for the `mult` objective have the following additional columns:
-* `perc_highly_active` indicates the percentage of target in the target set that the guide is determined to be active on. In order to be considered highly active, a guide must be classified as active by the classifier model and have a predicted activity within the top quartile by the regression model.
+* `perc_highly_active` indicates the percentage of target in the target set that the guide is determined to be highly active on. The definition of ``highly active'' is provided in [the ADAPT publication](https://doi.org/10.1038/s41587-022-01213-5).
 * `shannon_entropy` is the average shannon entropy across the 28 nucleotide guide-binding region of the target set. A higher shannon entropy indicates that the genomic site has a higher degree of genomic diversity.
 
 The output files of guides designed for the `diff` objective have the following additional columns:
