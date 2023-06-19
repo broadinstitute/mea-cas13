@@ -18,7 +18,7 @@ To learn more, please see our [preprint](blank link) that describes the algorith
 
 The algorithms developed in this project depend on several Python packages. Two principal dependencies are [ADAPT](https://github.com/broadinstitute/adapt/) (which includes the predictive models we use) and [flexs](https://github.com/samsinai/FLEXS) (which implements algorithms for exploring fitness landscapes).
 
-We've included a script, [`setup.sh`](./setup.sh) that will download the required Python dependencies, and install the mea-cas13 Python package.
+We've included a script, [`setup.sh`](./setup.sh), that will download the required Python dependencies and install the mea-cas13 Python package.
 
 To setup the package, we suggest cloning the repository and running the setup script as follows:
 ```bash
@@ -36,7 +36,7 @@ conda activate mea-cas13
 
 Alternatively, if you'd like to do this manually, you can create a virtual environment and use pip to install all of the packages listed in [`requirements.txt`](./requirements.txt).
 
-After completing this setup, you can design guides using the the `design_guides.py` script as described in the below sections.
+After completing this setup, you can design guides using the the `design_guides.py` program as described in the below sections.
 
 ## Using the model-guided exploration algorithms
 
@@ -90,11 +90,11 @@ The algorithms also create additional files in the `results_path`:
 
 ## Example usage
 
-Below is an example of how the [`design_guides.py`](./design_guides.py) script can be run on genomic data to automatically design optimal diagnostic guides.
+Below is an example of how the [`design_guides.py`](./design_guides.py) program can be run on genomic data to automatically design optimal diagnostic guides.
 
 ### Multi-Target Detection
 
-This repository includes an example alignment of parainfluenza virus 4 genomes in the file [`PIV4.fasta`](./examples/input/PIV4.fasta). To design guides based on these genomes using the evolutionary exploration algorithm, run the below script:
+This repository includes an example alignment of parainfluenza virus 4 genomes in the file [`PIV4.fasta`](./examples/input/PIV4.fasta). To design guides based on these genomes using the evolutionary exploration algorithm, run the below command:
 
 ```bash
 python design_guides.py multi evolutionary ./examples/input/PIV4.fasta ./PIV4_example_output/ --use_range ./examples/input/PIV4_example_range.tsv
@@ -105,7 +105,7 @@ This will use the evolutionary algorithm to design diagnostic guides for the gen
 
 This repository includes example .fasta files for the region surrounding the E484K SNP in SARS-CoV-2 `./examples/input/E484K_variant_identification`. Specifically, [`E484.fasta`](./examples/input/E484K_variant_identification/E484.fasta) contains the WT sequence and [`E484K.fasta`](./examples/input/E484K_variant_identification/E484K.fasta) contains the sequence with the mutation.
 
-To design guides for this variant identification task using the WGAN-AM exploration algorithm, run the below script:
+To design guides for this variant identification task using the WGAN-AM exploration algorithm, run the below command:
  
 ```bash
 python design_guides.py diff wgan_am ./examples/input/E484K_variant_identification/ ./E484K_example_output/
@@ -114,7 +114,7 @@ This will run the WGAN-AM algorithm to design diagnostic guides that can identif
 
 ## Summary of contents
 Below is a summary of this repository's contents:
-* `design_guides.py`: Main python script that should be run by users. This script, which is further described below, designs diagnostic guides using the model-based exploration algorithms.
+* `design_guides.py`: Main python program that should be run by users. This program, which is further described below, designs diagnostic guides using the model-based exploration algorithms.
 * `requirements.txt`: List of the pip package dependencies that are required to be installed for the algorithms to run.
 * `examples/input/`: Contains sample aligned FASTA files of viral genomes and .tsvs for whitelisted genomic regions that can be used to test the algorithms.
 * `mea/utils/`: Scripts that enable the import of genomic sequences from FASTA files, the manipulation of DNA/RNA sequences, the training and import of the WGAN, and the usage of the predictive models.
