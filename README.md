@@ -30,8 +30,7 @@ cd mea-cas13
 conda create --name mea-package-env python=3.7.10
 conda activate mea-package-env
 
-# Enable permissions to execute the setup script, and run it
-chmod +x setup.sh
+# Run the setup script
 ./setup.sh
 ```
 
