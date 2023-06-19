@@ -16,11 +16,11 @@ To learn more, please see our [preprint](blank link) that describes the algorith
 
 ## Setting up the MEAs
 
-The algorithms developed in this project depend on many Python packages. 
+The algorithms developed in this project depend on several Python packages. Two principal dependencies are [ADAPT](https://github.com/broadinstitute/adapt/) (which includes the predictive models we use) and [flexs](https://github.com/samsinai/FLEXS) (which implements algorithms for exploring fitness landscapes).
 
-We've included a script, [`setup.sh`](./setup.sh) that will download the required Python dependencies, and install the mea Python package.
+We've included a script, [`setup.sh`](./setup.sh) that will download the required Python dependencies, and install the mea-cas13 Python package.
 
-To setup the MEA package, we suggest cloning the repository and running the setup script as follows:
+To setup the package, we suggest cloning the repository and running the setup script as follows:
 ```bash
 # Clone the repository
 git clone https://github.com/broadinstitute/mea-cas13.git
