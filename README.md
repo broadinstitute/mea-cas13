@@ -1,6 +1,6 @@
 # MEAs for Cas13 diagnostic guide design &nbsp;&middot;&nbsp; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE) 
 
-The model-guided exploration algorithms (MEAs) implemented in this repository design diagnostic probes that optimize well-defined functions over viral sequence diversity. 
+The model-guided exploration algorithms (MEAs) implemented in this repository design diagnostic guides that optimize well-defined functions over viral sequence diversity. 
 
 To learn more, please see our [preprint](blank link) that describes the algorithms implemented here and computat
 
@@ -40,7 +40,7 @@ After completing this setup, you can design guides using the the `design_guides.
 
 ## Using the model-guided exploration algorithms
 
-Once the required package dependencies are installed, you can use the algorithms to design diagnostic probes.
+Once the required package dependencies are installed, you can use the algorithms to design diagnostic guides.
 
 The main program for designing diagnostic assays is [`design_guides.py`](./bin/design_guides.py). 
 
@@ -114,7 +114,7 @@ This will run the WGAN-AM algorithm to design diagnostic guides that can identif
 
 ## Summary of contents
 Below is a summary of this repository's contents:
-* `design_guides.py`: Main python script that should be run by users. This script, which is further described below, designs diagnostic probes using the model-based exploration algorithms.
+* `design_guides.py`: Main python script that should be run by users. This script, which is further described below, designs diagnostic guides using the model-based exploration algorithms.
 * `requirements.txt`: List of the pip package dependencies that are required to be installed for the algorithms to run.
 * `examples/input/`: Contains sample aligned FASTA files of viral genomes and .tsvs for whitelisted genomic regions that can be used to test the algorithms.
 * `mea/utils/`: Scripts that enable the import of genomic sequences from FASTA files, the manipulation of DNA/RNA sequences, the training and import of the WGAN, and the usage of the predictive models.
