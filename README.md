@@ -1,4 +1,4 @@
-# MEA &nbsp;&middot;&nbsp; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE) 
+# MEAs for Cas13 diagnostic guide design &nbsp;&middot;&nbsp; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE) 
 
 The model-guided exploration algorithms (MEAs) implemented in this repository design diagnostic probes that optimize well-defined functions over viral sequence diversity. 
 
