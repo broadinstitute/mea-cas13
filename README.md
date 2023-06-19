@@ -27,8 +27,8 @@ git clone https://github.com/broadinstitute/mea-cas13.git
 cd mea-cas13
 
 # Create and activate a conda environment
-conda create --name mea-package-env python=3.7.10
-conda activate mea-package-env
+conda create --name mea-cas13 python=3.7.10
+conda activate mea-cas13
 
 # Run the setup script
 ./setup.sh
