@@ -99,7 +99,7 @@ This repository includes an example alignment of parainfluenza virus 4 genomes i
 ```bash
 python design_guides.py multi evolutionary ./examples/input/PIV4.fasta ./PIV4_example_output/ --use_range ./examples/input/PIV4_example_range.tsv
 ```
-This will use the evolutionary algorithm to design diagnostic guides for the genomic sequences in [`PIV4.fasta`](./examples/input/PIV4.fasta). Only the genomic sites in [`ranges.tsv`](./examples/input/PIV4_example_range.tsv) or the positions between 2100 to 2200 in the allignment (corresponding to the beginning of the V gene) will considered. The results will be saved to `./PIV4_example_output/`. The runtime of the algorithms scales linearly with the number of genomic sites considered, if you are planning to run the algorithms on tens of thousands of positions, we recommend using a machine with many CPUs for the jobs to be parallelized over.
+This will use the evolutionary algorithm to design diagnostic guides for the genomic sequences in [`PIV4.fasta`](./examples/input/PIV4.fasta). Only the genomic sites in [`ranges.tsv`](./examples/input/PIV4_example_range.tsv) or the positions between 2100 to 2110 in the alignment (corresponding to the beginning of the V gene) will considered. The results will be saved to `./PIV4_example_output/`. The runtime of the algorithms scales linearly with the number of genomic sites considered; if you are planning to run the algorithms on tens of thousands of positions, we recommend using a machine with many CPUs for the jobs to be parallelized over.
 
 ### Variant Identification
 
