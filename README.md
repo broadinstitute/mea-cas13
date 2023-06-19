@@ -59,7 +59,7 @@ python design_guides.py [objective] [exploration_algorithm] [fasta_path] [result
 
 `design_guides.py` also has several optional arguments, as detailed below:
 * `--use_range` is a path to a .tsv file that specifies  the ranges of genomic sites that should be considered. The .tsv file should have to columns of integers: the first column is the start of the included range, and the second column is the end of the included range.
-* `--num_cpu` tells the script how many CPUs it can parallelize jobs over. `--num_cpu` is automatically set to 1, as most machines only have 1 CPU, but if this program is being run on a machine with more CPUs, then increasing `--num_cpu` will enable multiple genomic sites to be designed for at once, enabling faster performance.
+* `--num_cpu` tells the program how many CPUs it can parallelize jobs over. `--num_cpu` is, by default, set to 1 fewer than the number of cores on the machine. In general, increasing `--num_cpu` will enable multiple genomic sites to be designed for at once, enabling faster performance.
 
 ## Output format
 
@@ -97,9 +97,9 @@ Below is an example of how the [`design_guides.py`](./design_guides.py) script c
 This repository includes an example alignment of parainfluenza virus 4 genomes in the file [`PIV4.fasta`](./examples/input/PIV4.fasta). To design guides based on these genomes using the evolutionary exploration algorithm, run the below script:
 
 ```bash
-python design_guides.py multi evolutionary ./examples/input/PIV4.fasta ./PIV4_example_output/ --num_cpu 1 --use_range ./examples/input/PIV4_example_range.tsv
+python design_guides.py multi evolutionary ./examples/input/PIV4.fasta ./PIV4_example_output/ --use_range ./examples/input/PIV4_example_range.tsv
 ```
-This will use the evolutionary algorithm to design diagnostic guides for the genomic sequences in [`PIV4.fasta`](./examples/input/PIV4.fasta) using 1 CPU. Only the genomic sites in [`ranges.tsv`](./examples/input/PIV4_example_range.tsv) or the positions between 2100 to 2200 in the allignment (corresponding to the beginning of the V gene) will considered. The results will be saved to `./PIV4_example_output/`. The runtime of the algorithms scales linearly with the number of genomic sites considered, if you are planning to run the algorithms on tens of thousands of positions, we recommend using a machine with many CPUs for the jobs to be parallelized over.
+This will use the evolutionary algorithm to design diagnostic guides for the genomic sequences in [`PIV4.fasta`](./examples/input/PIV4.fasta). Only the genomic sites in [`ranges.tsv`](./examples/input/PIV4_example_range.tsv) or the positions between 2100 to 2200 in the allignment (corresponding to the beginning of the V gene) will considered. The results will be saved to `./PIV4_example_output/`. The runtime of the algorithms scales linearly with the number of genomic sites considered, if you are planning to run the algorithms on tens of thousands of positions, we recommend using a machine with many CPUs for the jobs to be parallelized over.
 
 ### Variant Identification
 
@@ -108,7 +108,7 @@ This repository includes example .fasta files for the region surrounding the E48
 To design guides for this variant identification task using the WGAN-AM exploration algorithm, run the below script:
  
 ```bash
-python design_guides.py diff wgan_am ./examples/input/E484K_variant_identification/ ./E484K_example_output/ --num_cpu 1
+python design_guides.py diff wgan_am ./examples/input/E484K_variant_identification/ ./E484K_example_output/
 ```
 This will run the WGAN-AM algorithm to design diagnostic guides that can identify the targeted SNP, and will save the per-site and compiled results to `./E484K_example_output/`.
 
