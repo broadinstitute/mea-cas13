@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Script for running the model-guided exploration algorithms to design diagnostic Cas13a 
 diagnostic guide RNA spacer sequences.
