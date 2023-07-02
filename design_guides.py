@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Script for running the model-guided exploration algorithms to design diagnostic Cas13a 
 diagnostic guide RNA spacer sequences.
@@ -336,7 +337,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_cpu',
         type = int,
         help=("Number of CPUs to parallelize the jobs over. Each genomic site can be designed for in parallel."""),
-            default = multiprocessing.cpu_count() - 1)
+            default = 0)
     
     parser.add_argument('--verbose_results',
     help=("Determines if the methods output the standard results file or the verbose results file with additional fields."""),
@@ -444,10 +445,13 @@ if __name__ == '__main__':
     print('Running the following exploration algorithms: {} across {} genomic sites'.format(exploration_algos, len(seqs_df)))
 
     # Using Python's multiprocessing module to run the exploration algorithms across the genomic sites in parallel
+    num_cpu = args.num_cpu
+    if num_cpu == 0:
+        num_cpu = max(1, multiprocessing.cpu_count() - 1)
     jobs = []
     for site, site_df in seqs_df.iterrows():
         for explorer in explorers_to_run:
-            while len(jobs) >= args.num_cpu:
+            while len(jobs) >= num_cpu:
                 jobs = [job for job in jobs if job.is_alive()]
                 time.sleep(.1)
 

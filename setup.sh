@@ -7,5 +7,5 @@ pip install tensorflow==2.11.0
 pip install fastaparser==1.1
 pip install matplotlib==3.3.4
 
-# Clone install the package
+# Pip install the package
 python -m pip install ./
