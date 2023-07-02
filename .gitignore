@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Output Files
+PIV4_example_output/
+E484K_example_output/
+
 # C extensions
 *.so
 

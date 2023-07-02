@@ -60,6 +60,8 @@ python design_guides.py [objective] [exploration_algorithm] [fasta_path] [result
 `design_guides.py` also has several optional arguments, as detailed below:
 * `--use_range` is a path to a .tsv file that specifies  the ranges of genomic sites that should be considered. The .tsv file should have to columns of integers: the first column is the start of the included range, and the second column is the end of the included range.
 * `--num_cpu` tells the program how many CPUs it can parallelize jobs over. `--num_cpu` is, by default, set to 1 fewer than the number of cores on the machine. In general, increasing `--num_cpu` will enable multiple genomic sites to be designed for at once, enabling faster performance.
+* `--n_top_guides` tells the program how many of guides it should output. `--n_top_guides` is, by default, set to 20, so the program outputs the 20 guides with the highest fitness.
+
 
 ## Output format
 
@@ -67,7 +69,7 @@ The algorithm creates one file per explorer run, stored at `results_path/results
 
 All compiled results files have the following columns:
 * `algo` is the algorithm used to design the guides.
-* `fitness` is the fitness of the guide computed for the design objective specified (either `mult` or `diff`).
+* `fitness` is the fitness of the guide computed for the design objective specified (either `mult` or `diff`), as described in the MEA manuscript. These fitness values are helpful to use for relative comparisons against other guides designed for the same objective on the same input sequences, but are not meant for interpretation in an absolute sense. It is normal for these fitness values to be negative.
 * `guide_sequence` is the sequence of the guide that was designed by the algorithm. *NOTE: This is in the frame of the protospacer, so it must be reverse-complemented, converted from a DNA to RNA sequence, and have the LwCas13a direct repeat added on in order to serve as a functional guide RNA sequence.*
 * `start_pos` indicates the positions in the target where the guide binds. More specifically, the guide's spacer binds the positions `start_pos` to `start_pos + 28` in the target.
 * `shannon_entropy` is the entropy at that genomic site.

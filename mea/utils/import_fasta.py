@@ -41,8 +41,12 @@ def read_multi_detection(fasta_path, temp_path, included_sites_list = None):
     min_length = min([len(seq) for seq in seqs])
     start_pos_list = range(min_length)
 
+    # If a list of sites is provided, only include those sites
     if(included_sites_list):
-        start_pos_list = included_sites_list
+        start_pos_list = [site - 11 for site in included_sites_list]
+        if(min(included_sites_list) < 10):
+            print("The start_pos of the included_sites_list should be 10 or greater, since the first 10 positions required to provide context for the predictive model.")
+            exit(1) 
         
     for start_pos in start_pos_list:
         # Only include sequences that have valid characters and no gaps
@@ -53,8 +57,8 @@ def read_multi_detection(fasta_path, temp_path, included_sites_list = None):
             continue
 
         seqs_dict['target_set'].append(targets)
-        seqs_dict['start_pos'].append(start_pos)           
-        seqs_dict['seq_id'].append(fasta_path.split('/')[-1].split('.fasta')[0] + "_pos" + str(start_pos))
+        seqs_dict['start_pos'].append(int(start_pos + 11))  # Add 11 because the start_pos is where the target (with 10nt context) starts, and is zero-indexed            
+        seqs_dict['seq_id'].append(fasta_path.split('/')[-1].split('.fasta')[0] + "_pos" + str(start_pos + 11))
  
 
     virus_df = pd.DataFrame(seqs_dict)
@@ -132,7 +136,10 @@ def read_diff_identification(fasta_path, temp_path, included_sites_list = None, 
 
     # If a list of sites is provided, only include those sites
     if(included_sites_list):
-        start_pos_list_final = included_sites_list
+        start_pos_list_final = [site - 11 for site in included_sites_list]
+        if(min(included_sites_list) < 10):
+            print("The start_pos of the included_sites_list should be 10 or greater, since the first 10 positions required to provide context for the predictive model.")
+            exit(1) 
 
     df_list = []
     for idx, alignment_file in enumerate(fasta_files):
@@ -143,7 +150,7 @@ def read_diff_identification(fasta_path, temp_path, included_sites_list = None, 
         file_idx.remove(idx)
         
         for start_pos in start_pos_list_final:
-            target_set1_nt = valid_seqs_from_list(start_pos, seqs_diff[idx])
+            target_set1_nt = valid_seqs_from_list(start_pos, seqs_diff[idx]) 
                         
             seqs_diff2 = [item for sublist in seqs_diff[file_idx] for item in sublist]
             target_set2_nt = valid_seqs_from_list(start_pos, seqs_diff2)                
@@ -161,15 +168,15 @@ def read_diff_identification(fasta_path, temp_path, included_sites_list = None, 
             v2.remove(alignment_file)
             v2 = [x.split('.fasta')[0] for x in v2]
             target2_name = "-".join(v2)
-            site_df = site_df.append(pd.DataFrame({'seq_id': [f"{target1_name}_vs_{target2_name}.{start_pos}"],
-                                'start_pos': [start_pos],
+            site_df = site_df.append(pd.DataFrame({'seq_id': [f"{target1_name}_vs_{target2_name}.{start_pos + 11}"],
+                                'start_pos': [int(start_pos + 11)], 
                                 'target_set1_nt': [target_set1_nt],
                                 'target_set2_nt': [target_set2_nt],
                                 'target1_name' : [target1_name]  ,
                                 'target2_name': [target2_name]  })).reset_index(drop = True)
     
 
-        df_list.append(site_df) 
+        df_list.append(site_df)  
                 
     master_df = pd.concat(df_list).reset_index(drop = True)
     master_df.to_pickle(os.path.join(temp_path + 'processed_variant_identification_sites.pkl'))

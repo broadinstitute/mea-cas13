@@ -168,7 +168,7 @@ def save_results(explorer_name, gen_seqs, site_df, args, model, s_time):
         for index, gen_seq in gen_seqs.iterrows():
             results_df = results_df.append(pd.DataFrame({
             'algo': [explorer_name],
-            'start_pos': [site_df.start_pos+11], #Add 11 because the start_pos is where the target (with context) starts, and is zero-indexed
+            'start_pos': [site_df.start_pos],
             'guide_sequence': [gen_seq.sequence],
             'fitness': [gen_seq.fitness],
             'perc_highly_active': [model._fitness_function(gen_seq.sequence, output_type = 'perc_highly_active')[0]],
@@ -184,9 +184,9 @@ def save_results(explorer_name, gen_seqs, site_df, args, model, s_time):
             for baseline_method, baseline_sequence in zip(['adapt', 'consensus'], [site_df['adapt_guide'], model.target_cons_no_context_nt]):
                 results_df = results_df.append(pd.DataFrame({
                 'algo': [baseline_method],
-                'start_pos': [site_df.start_pos+11],
+                'start_pos': [site_df.start_pos],
                 'guide_sequence': [baseline_sequence],
-                'fitness': [model._fitness_function(baseline_sequence)[0]],
+                'fitness': [model._fitness_function(baseline_sequence)[0]], 
                 'perc_highly_active': [model._fitness_function(baseline_sequence, output_type = 'perc_highly_active')[0]],
                 'hd_cons': [prep_seqs.hamming_dist(baseline_sequence, model.target_cons_no_context_nt)],
                 'shannon_entropy': [shannon_entropy_site],
@@ -197,7 +197,7 @@ def save_results(explorer_name, gen_seqs, site_df, args, model, s_time):
                 })).reset_index(drop = True)         
 
         if(not args.verbose_results):
-            results_df = results_df.drop(columns = ['hd_min_targets', 'num_targets', 'num_utargets', 'runtime'])
+            results_df = results_df.drop(columns = ['hd_cons', 'hd_min_targets', 'num_targets', 'num_utargets', 'runtime'])
  
     else:
         
@@ -206,8 +206,8 @@ def save_results(explorer_name, gen_seqs, site_df, args, model, s_time):
             results_df = results_df.append(pd.DataFrame({ 
             'algo': [explorer_name],
             'on_target_name' : [site_df.target1_name],
-            'off_target_name': [site_df.target2_name],
-            'start_pos': [site_df.start_pos+11],
+            'off_target_name': [site_df.target2_name], 
+            'start_pos': [site_df.start_pos],
             'guide_sequence': [gen_seq.sequence],
             'fitness':[gen_seq.fitness],
             'hd_cons_on_target': [prep_seqs.hamming_dist(gen_seq.sequence, prep_seqs.consensus_seq(model.target_set1_nt, nt = True)[context_nt:-context_nt])],
@@ -220,19 +220,19 @@ def save_results(explorer_name, gen_seqs, site_df, args, model, s_time):
             't1_cost_input' : [perf[3]], 
             't2_cost_input' : [perf[4]], 
             't1cost' : [perf[5]], 
-            't2cost' : [perf[6]], 
+            't2cost' : [perf[6]],  
             'pred_perf_t1' : [perf[7]], 
             'pred_perf_t2' : [perf[8]], 
             'pred_act_t1' : [perf[9]], 
             'pred_act_t2' : [perf[10]],
             'runtime': [runtime]
-            })).reset_index(drop = True)           
+            })).reset_index(drop = True)            
 
         if(not args.verbose_results):
-            results_df = results_df.drop(columns = ['hd_min_targets', 'hd_min_target_set1', 'hd_min_target_set2',
+            results_df = results_df.drop(columns = ['hd_cons_on_target', 'hd_min_targets', 'hd_min_target_set1', 'hd_min_target_set2',
             't1_t2_diff_activity', 't1_cost_input', 't2_cost_input', 't1cost', 't2cost', 'pred_perf_t1', 'pred_perf_t2', 'pred_act_t1', 'pred_act_t2', 'runtime'])
 
-
+    results_df.start_pos = results_df.start_pos.astype(int)
     results_df = results_df.drop_duplicates(ignore_index=True).sort_values(by = 'fitness', ascending=False)
  
     if(args.save_pickled_results):
@@ -254,6 +254,7 @@ def compile_results_across_sites(explorer_name, args):
     results_files = os.listdir(results_dir)
 
     all_results_df = pd.DataFrame()
+    target_set_results_df = pd.DataFrame()
 
     for file in results_files:
         if(args.n_top_guides_per_site == 0):
@@ -280,22 +281,26 @@ def compile_results_across_sites(explorer_name, args):
     else:
         unique_target_sets = all_results_df.on_target_name.unique()
         for target_set in unique_target_sets:
-            target_set_results_df = all_results_df[all_results_df.on_target_name == target_set].sort_values(by = 'fitness', ascending=False)
+            per_target_result = all_results_df[all_results_df.on_target_name == target_set].sort_values(by = 'fitness', ascending=False)
 
             if(args.n_top_guides_per_site == 0):
                 # Save the top n guides for each target set
-                target_set_results_df = target_set_results_df.reset_index(drop = True).iloc[0:args.n_top_guides] 
+                proc_per_target_results = per_target_result.reset_index(drop = True).iloc[0:args.n_top_guides] 
   
             else:    
                 # Group the target_set_results_df by the start_pos and then take the top n guides for each start_pos
                 collected_results = pd.DataFrame()
-                for name, genomic_site_df in target_set_results_df.groupby('start_pos'):
+                for name, genomic_site_df in per_target_result.groupby('start_pos'):
                     reset_genomic_site_df = genomic_site_df.reset_index(drop = True)
                     indices = prep_seqs.edit_distance_index(genomic_site_df, args.n_top_guides_per_site, edit_dist_thresh = 3)
                     collected_results = collected_results.append(reset_genomic_site_df.iloc[indices])
-                target_set_results_df = collected_results.sort_values(by = 'fitness', ascending=False)
+                proc_per_target_results = collected_results
 
-    target_set_results_df.reset_index(drop = True).to_csv(os.path.join(args.results_path, f'results_compiled_{explorer_name}_{target_set}.tsv'), sep = '\t', index=False)
+            target_set_results_df = target_set_results_df.append(proc_per_target_results).sort_values(by = ['on_target_name', 'fitness'], ascending=False)
+
+    target_set_results_df.start_pos = target_set_results_df.start_pos.astype(int) 
+    target_set_results_df = target_set_results_df.drop_duplicates(ignore_index=True)
+    target_set_results_df.reset_index(drop = True).to_csv(os.path.join(args.results_path, f'results_compiled_{explorer_name}.tsv'), sep = '\t', index=False)
  
  
 if __name__ == '__main__':
@@ -462,8 +467,8 @@ if __name__ == '__main__':
     
     # Waiting for all the jobs to finish and then saving the results across all sites that both explorers considered 
     while len([job for job in jobs if job.is_alive()]) > 0:
-        time.sleep(25)
+        time.sleep(10)
         print('Waiting for all jobs across the different genomic sites to finish, and then will compile results')
-
+ 
     for explorer in exploration_algos: 
         compile_results_across_sites(explorer, args)
